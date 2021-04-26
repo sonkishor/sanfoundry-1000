@@ -9,19 +9,21 @@ from openpyxl.utils import get_column_letter
 wb = Workbook()
 dest_filename = 'sanf.xlsx'
 ws1 = wb.active
-url = "https://www.sanfoundry.com/1000-discrete-mathematics-questions-answers/#foundation-logics-proofs"
-
+url = "https://www.sanfoundry.com/1000-discrete-mathematics-questions-answers/"
+# enter the URL of the subject you want to extract the MCQ of
 request = requests.get(url)
 
 soup = bs(request.content, 'html.parser')
 
-table = soup.find('table', attrs = {'style':"width:100%"}).find_all('li')
+table = soup.find_all('table', attrs = {'style':"width:100%"})
 print(type(table))
 urllist = []
-for data in table:
-    datastr = str(data)
-    link = re.findall(r"https://www.sanfoundry.com[a-z/-]*", datastr)
-    urllist.append(link)
+for td in table:
+    tr = td.find_all("li")
+    for data in tr:
+        datastr = str(data)
+        link = re.findall(r"https://www.sanfoundry.com[a-z/-]*", datastr)
+        urllist.append(link)
     flat = flatten(urllist)
 y=2
 z=2
